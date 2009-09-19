@@ -424,7 +424,7 @@ if(FLUSSPFERD_HAVE_POSIX)
     set(PLUGINS ${PLUGINS} posix)
 endif()
 
-set(PLUGINS os)
+set(PLUGINS ${PLUGINS} os)
 
 if(PLUGIN_GMP AND GMP_FOUND AND GMPXX_FOUND)
     set(PLUGINS ${PLUGINS} gmp)
