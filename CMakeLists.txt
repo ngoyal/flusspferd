@@ -420,11 +420,11 @@ endif()
 
 ## Plugins #################################################################
 
+set(PLUGINS os)
+
 if(FLUSSPFERD_HAVE_POSIX)
     set(PLUGINS ${PLUGINS} posix)
 endif()
-
-set(PLUGINS ${PLUGINS} os)
 
 if(PLUGIN_GMP AND GMP_FOUND AND GMPXX_FOUND)
     set(PLUGINS ${PLUGINS} gmp)
