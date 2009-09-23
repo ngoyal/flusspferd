@@ -449,6 +449,8 @@ if(PLUGIN_GMP AND GMP_FOUND AND GMPXX_FOUND)
     include_directories(${GMP_INCLUDE_DIR})
 endif()
 
+set(PLUGINS ${PLUGINS} directory)
+
 foreach(PLUGIN ${PLUGINS})
     message(STATUS "Plugin: ${PLUGIN} (will be built)")
 
