@@ -41,9 +41,15 @@ array ls(boost::optional<std::string> const &dir_) {
 
   return result;
 }
+
+bool is_dir(std::string const &what) {
+
+  return boost::filesystem::is_directory(what);
+}
 }
 
 FLUSSPFERD_LOADER_SIMPLE(exports) {
   create_native_function(exports, "ls", &ls);
+  create_native_function(exports, "isDirectory", &is_dir);
 }
 
