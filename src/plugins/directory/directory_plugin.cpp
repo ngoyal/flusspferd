@@ -27,6 +27,7 @@ THE SOFTWARE.
 using namespace flusspferd;
 
 namespace {
+
 array ls(boost::optional<std::string> const &dir_) {
   std::string dir = dir_ ? dir_.get() : ".";
 
@@ -43,13 +44,18 @@ array ls(boost::optional<std::string> const &dir_) {
 }
 
 bool is_dir(std::string const &what) {
-
   return boost::filesystem::is_directory(what);
 }
+
+bool create_directory(std::string const &dir) {
+  return boost::filesystem::create_directory(dir);
+}
+
 }
 
 FLUSSPFERD_LOADER_SIMPLE(exports) {
   create_native_function(exports, "ls", &ls);
   create_native_function(exports, "isDirectory", &is_dir);
+  create_native_function(exports, "createDirectory", &create_directory);
 }
 
