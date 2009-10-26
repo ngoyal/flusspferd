@@ -410,6 +410,12 @@ if(WIN32)
     install(TARGETS flusspferd ARCHIVE DESTINATION ${INSTALL_LIBRARIES_PATH})
 else()
     install(TARGETS flusspferd LIBRARY DESTINATION ${INSTALL_LIBRARIES_PATH})
+    set_target_properties(
+        flusspferd
+        PROPERTIES
+        INSTALL_NAME_DIR "@executable_path/../lib"
+        BUILD_WITH_INSTALL_RPATH 1
+    )
 endif()
 
 ## Library - coverage variant ###############################################
