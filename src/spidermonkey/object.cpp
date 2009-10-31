@@ -225,13 +225,10 @@ namespace {
     JSObject *&setter_o,
     unsigned &sm_flags)
   {
-    function getter;
-    if (attrs.getter) getter = attrs.getter.get();
-    function setter;
-    if (attrs.setter) setter = attrs.setter.get();
-
-    getter_o = Impl::get_object(getter);
-    setter_o = Impl::get_object(setter);
+    if (attrs.getter) 
+      getter_o = Impl::get_object(*attrs.getter);
+    if (attrs.setter)
+      setter_o = Impl::get_object(*attrs.setter);
 
     unsigned const flags = attrs.flags;
     if (~flags & dont_enumerate) sm_flags |= JSPROP_ENUMERATE;
@@ -398,32 +395,34 @@ namespace {
   set_property_attributes(
     uintN sm_flags, void *getter_op, void *setter_op)
   {
-    property_attributes attrs;
+    property_flag flags = no_property_flag;
     if (~sm_flags & JSPROP_ENUMERATE)
-      attrs.flags = attrs.flags | dont_enumerate;
+      flags = flags | dont_enumerate;
     if (sm_flags & JSPROP_PERMANENT)
-      attrs.flags = attrs.flags | permanent_property;
+      flags = flags | permanent_property;
     if (sm_flags & JSPROP_READONLY)
-      attrs.flags = attrs.flags | read_only_property;
+      flags = flags | read_only_property;
     if (sm_flags & JSPROP_SHARED)
-      attrs.flags = attrs.flags | shared_property;
+      flags = flags | shared_property;
 
+    function getter;
     if (getter_op) {
       if (sm_flags & JSPROP_GETTER) {
-        attrs.getter = Impl::wrap_object((JSObject*)getter_op);
+        getter = Impl::wrap_object((JSObject*)getter_op);
       } else {
         // What do i set attrs.getter to here....?
       }
     }
-  
+
+    function setter;
     if (setter_op) {
       if (sm_flags & JSPROP_SETTER) {
-        attrs.setter = Impl::wrap_object((JSObject*)setter_op);
+        setter = Impl::wrap_object((JSObject*)setter_op);
       } else {
         // What do i set attrs.setter to here....?
       }
     }
-    return attrs;
+    return property_attributes(flags, getter, setter);
   }
 }
 

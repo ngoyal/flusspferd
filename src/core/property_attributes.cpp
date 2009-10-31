@@ -25,20 +25,43 @@ THE SOFTWARE.
 */
 #include "flusspferd/property_attributes.hpp"
 
+#include "flusspferd/function.hpp"
+
 using namespace flusspferd;
+
+namespace {
+  template<class T>
+  function *copyfun(T const &fun) {
+    return fun ? new function(*fun) : 0x0;
+  }
+}
 
 property_attributes::property_attributes()
   : flags(no_property_flag),
     getter(boost::none),
     setter(boost::none)
-{}
+{ }
 
 property_attributes::property_attributes(
   property_flag flags, 
   boost::optional<function const &> getter,
   boost::optional<function const &> setter
 )
-  : flags(flags),
-    getter(getter),
-    setter(setter)
-{}
+  : flags(flags), getter(copyfun(getter)), setter(copyfun(setter))
+{ }
+
+property_attributes::~property_attributes() {
+  delete getter.get();
+  delete setter.get();
+}
+
+property_attributes::property_attributes(property_attributes const &o)
+  : flags(o.flags), getter(copyfun(o.getter)), setter(copyfun(o.setter))
+{ }
+
+void swap(property_attributes &lhs, property_attributes &rhs) {
+  using std::swap;
+  swap(lhs.flags, rhs.flags);
+  swap(lhs.getter, rhs.getter);
+  swap(lhs.setter, rhs.setter);
+}
