@@ -91,10 +91,10 @@ struct property_attributes {
   property_flag flags;
 
   /// The property's getter.
-  boost::optional<function> getter;
+  boost::optional<function const &> getter;
 
   /// The property's setter.
-  boost::optional<function> setter;
+  boost::optional<function const &> setter;
 
   /// Construct default attributes.
   property_attributes();
