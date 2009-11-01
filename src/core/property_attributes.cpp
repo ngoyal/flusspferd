@@ -24,13 +24,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 #include "flusspferd/property_attributes.hpp"
+#include "flusspferd/function.hpp"
 
 using namespace flusspferd;
 
 property_attributes::property_attributes()
-  : flags(no_property_flag),
-    getter(boost::none),
-    setter(boost::none)
+  : flags(no_property_flag)
 {}
 
 property_attributes::property_attributes(
@@ -39,6 +38,13 @@ property_attributes::property_attributes(
   boost::optional<function const &> setter
 )
   : flags(flags),
-    getter(getter),
-    setter(setter)
+    getter(getter ? new function(*getter) : 0),
+    setter(setter ? new function(*setter) : 0)
+{}
+
+property_attributes::property_attributes(property_attributes const &o)
+  : flags(o.flags), getter(o.getter), setter(o.setter)
+{}
+
+property_attributes::~property_attributes()
 {}

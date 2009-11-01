@@ -27,7 +27,9 @@ THE SOFTWARE.
 #ifndef FLUSSPFERD_PROPERTY_ATTRIBUTES
 #define FLUSSPFERD_PROPERTY_ATTRIBUTES
 
+#include <boost/shared_ptr.hpp>
 #include <boost/optional.hpp>
+#include <boost/none.hpp>
 
 namespace flusspferd {
 
@@ -95,14 +97,14 @@ struct property_attributes {
    *
    *  A function returning the property's value.
    */
-  boost::optional<function const &> getter;
+  boost::shared_ptr<function const> getter;
 
   /**
    * The property's setter.
    *
    * A function taking the property's value.
    */
-  boost::optional<function const &> setter;
+  boost::shared_ptr<function const> setter;
 
   /// Construct default attributes.
   property_attributes();
@@ -117,6 +119,12 @@ struct property_attributes {
   property_attributes(property_flag flags, 
     boost::optional<function const &> getter = boost::none,
     boost::optional<function const &> setter = boost::none);
+
+  /// Copy constructor.
+  property_attributes(property_attributes const &);
+
+  /// Destructor.
+  ~property_attributes();
 };
 
 }

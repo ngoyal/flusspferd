@@ -226,9 +226,9 @@ namespace {
     unsigned &sm_flags)
   {
     function getter;
-    if (attrs.getter) getter = attrs.getter.get();
+    if (attrs.getter) getter = *attrs.getter;
     function setter;
-    if (attrs.setter) setter = attrs.setter.get();
+    if (attrs.setter) setter = *attrs.setter;
 
     getter_o = Impl::get_object(getter);
     setter_o = Impl::get_object(setter);
@@ -410,7 +410,7 @@ namespace {
 
     if (getter_op) {
       if (sm_flags & JSPROP_GETTER) {
-        attrs.getter = Impl::wrap_object((JSObject*)getter_op);
+        attrs.getter.reset(new function(Impl::wrap_object((JSObject*)getter_op)));
       } else {
         // What do i set attrs.getter to here....?
       }
@@ -418,7 +418,7 @@ namespace {
   
     if (setter_op) {
       if (sm_flags & JSPROP_SETTER) {
-        attrs.setter = Impl::wrap_object((JSObject*)setter_op);
+        attrs.setter.reset(new function(Impl::wrap_object((JSObject*)setter_op)));
       } else {
         // What do i set attrs.setter to here....?
       }
