@@ -24,13 +24,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 #include "flusspferd/property_attributes.hpp"
+#include "flusspferd/function.hpp"
 
 using namespace flusspferd;
 
+class property_attributes::impl {
+public:
+  boost::optional<function> getter;
+  boost::optional<function> setter;
+};
+
 property_attributes::property_attributes()
-  : flags(no_property_flag),
-    getter(boost::none),
-    setter(boost::none)
+  : p(new impl),
+    flags(no_property_flag),
+    getter(p->getter),
+    setter(p->setter)
 {}
 
 property_attributes::property_attributes(
@@ -38,7 +46,26 @@ property_attributes::property_attributes(
   boost::optional<function const &> getter,
   boost::optional<function const &> setter
 )
-  : flags(flags),
-    getter(getter),
-    setter(setter)
+  : p(new impl),
+    flags(flags),
+    getter(p->getter),
+    setter(p->setter)
+{
+  if (getter)
+    this->getter = getter.get();
+  if (setter)
+    this->setter = setter.get();
+}
+
+property_attributes::property_attributes(property_attributes const &o)
+  : p(new impl),
+    flags(o.flags),
+    getter(p->getter),
+    setter(p->setter)
+{
+  this->getter = o.getter;
+  this->setter = o.setter;
+}
+
+property_attributes::~property_attributes()
 {}
